@@ -24,7 +24,7 @@ const Subjects = ({ subject }: SubjectProps) => {
       <View
         style={[
           styles.subjectIcon,
-          { backgroundColor: subject.color ? subject.color : "purple" },
+          { backgroundColor: subject.color ? subject.color : "teal" },
         ]}
       >
         <Ionicons name="book-outline" color={"white"} size={28} />

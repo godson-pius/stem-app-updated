@@ -262,7 +262,7 @@ const SecondReg = () => {
                <View style={styles.container}>
                    <Image style={styles.image} source={require('@/assets/images/logo.png')}/>
                    <Text style={[defaultStyle.text, styles.title]}>Start Learning</Text>
-                   <Text style={defaultStyle.text}>Geanco STEM</Text>
+                   <Text style={defaultStyle.text}>iLearnSTEM</Text>
 
                    <View style={{ marginTop: 60 }}>
                        <SelectList
@@ -308,7 +308,7 @@ const SecondReg = () => {
                    {loading ? <ActivityIndicator size={"small"} className={'my-5 text-blue-900'} /> : null}
 
                    <Text style={[defaultStyle.text, { marginTop: 30, color: 'gray'}]}>Secured by
-                       GeancoStem</Text>
+                       legions of hope</Text>
                </View>
            </ScrollView>
        </KeyboardAvoidingView>

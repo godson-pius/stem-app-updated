@@ -1,10 +1,11 @@
-import {Alert, SafeAreaView, StyleSheet, Text, View, ScrollView, RefreshControl, ActivityIndicator} from 'react-native'
+import {Alert, StyleSheet, Text, View, ScrollView, RefreshControl, ActivityIndicator} from 'react-native'
 import React, {useEffect, useRef, useState} from 'react'
 import { defaultStyle } from '@/utils/defaultStyle'
 import VideoItem from '@/components/VideoItem';
 import {useLocalSearchParams} from "expo-router";
 import {getAllTopicsForACourse, getAllUploadsForACourse} from "@/utils/firestore";
 import {IVideo} from "@/interface";
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const videoSource = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
 
@@ -33,7 +34,6 @@ const Videos = () => {
             topic: args.topic,
         }
         const res = await getAllUploadsForACourse(courseDetails)
-        console.log("Videos => ", res)
         if (res) {
             setVideos(res)
             setLoading(false);
@@ -56,10 +56,12 @@ const Videos = () => {
     // })
 
     return (
-        <SafeAreaView className={'bg-white py-7 h-screen'}>
+        
             <ScrollView
-                className={'h-screen'}
+                className={'pt-10'}
                 style={defaultStyle.container}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{paddingBottom: 90}}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             >
                 {!loading ? (
@@ -72,7 +74,7 @@ const Videos = () => {
                     <ActivityIndicator size={"small"} className={'my-5 text-blue-900'} />
                 )}
             </ScrollView>
-        </SafeAreaView>
+        
     )
 }
 

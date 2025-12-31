@@ -1,25 +1,27 @@
 import {
   View,
   Text,
-  SafeAreaView,
   TextInput,
   FlatList,
   Dimensions,
   RefreshControl,
   Alert,
+  ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { defaultStyle } from "@/utils/defaultStyle";
 import Topic from "@/components/Topic";
 import { ISubject, ITopic } from "@/interface";
-import { useLocalSearchParams } from "expo-router";
+import { Link, useLocalSearchParams } from "expo-router";
 // @ts-ignore
 import { getAllTopicsForACourse } from "@/utils/firestore";
-import { tls } from "node-forge";
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const Lectures = () => {
   const [topics, setTopics] = useState<ITopic[]>([]);
   const [refreshing, setRefreshing] = React.useState(false);
+  const [loading, setLoading] = useState<boolean>(false)
   const args = useLocalSearchParams();
 
   const onRefresh = React.useCallback(async () => {
@@ -34,6 +36,7 @@ const Lectures = () => {
   }, []);
 
   const fetchTopics = async () => {
+    setLoading(true)
     if (Object.keys(args).length === 0) {
       return Alert.alert("Info", "Please select subject from home");
     }
@@ -44,8 +47,10 @@ const Lectures = () => {
     };
     const res = await getAllTopicsForACourse(courseDetails);
     if (res) {
+      setLoading(false)
       setTopics(res);
     } else {
+      setLoading(false)
       return null;
     }
   };
@@ -56,8 +61,22 @@ const Lectures = () => {
     })();
   }, [args.name]);
 
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator size={"small"} className={'my-5 text-blue-900'} />
+      </View>
+    );
+  }
+
   return (
-    <SafeAreaView className={"bg-white py-7 h-screen"}>
+    <SafeAreaView className={"bg-white py-3 h-screen"}>
       <View style={defaultStyle.container}>
         <Text style={[defaultStyle.text, { fontWeight: "bold", fontSize: 20 }]}>
           {args.name}
@@ -93,11 +112,19 @@ const Lectures = () => {
             data={topics}
             renderItem={({ item }) => <Topic course={args.name} topic={item} />}
             contentContainerStyle={{ paddingBottom: 10 }}
+            showsVerticalScrollIndicator={false}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
             ListEmptyComponent={
-              <Text className={"font-medium"}>No Topics yet!</Text>
+              <View className="justify-center items-center min-h-screen">
+                <Text className={"font-medium text-xl"}>No Topics yet!</Text>
+                <Link href={'/(tabs)'} asChild>
+                <TouchableOpacity>
+                  <Text className="text-sky-500">Return to home</Text>
+                </TouchableOpacity>
+                </Link>
+              </View>
             }
             style={{ height: "100%" }}
           />

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "STEM",
+    "name": "iLearnSTEM",
     "slug": "stem-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,7 +17,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.godsonpius.stemapp"
+      "package": "org.legionsofhope.ilearnstem"
     },
     "web": {
       "bundler": "metro",
@@ -40,8 +40,9 @@
       "typedRoutes": true
     },
     "extra": {
+      "router": {},
       "eas": {
-        "projectId": "69c3169d-07af-4b19-8d9f-936e60fa3e55"
+        "projectId": "c6e0a0cf-cd40-4325-9b95-7438c0d0240e"
       }
     }
   }

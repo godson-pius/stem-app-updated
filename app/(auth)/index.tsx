@@ -36,7 +36,6 @@ const Index = () => {
     };
     const res = await loginUser(data);
     if (res) {
-      console.log(res);
       setLoading(false);
 
       await storeData("userData", res);
@@ -85,7 +84,7 @@ const Index = () => {
             />
           </View>
           <Text style={[defaultStyle.text, styles.title]}>Start Learning</Text>
-          <Text style={defaultStyle.text}>Geanco STEM</Text>
+          <Text style={defaultStyle.text}>iLearnSTEM</Text>
 
           <View style={{ marginTop: 30 }}>
             <Text style={[defaultStyle.label]}>Enter email</Text>
@@ -143,7 +142,7 @@ const Index = () => {
           ) : null}
 
           <Text style={[defaultStyle.text, { marginTop: 30, color: "gray" }]}>
-            Secured by GeancoStem
+            Secured by legions of hope
           </Text>
         </View>
       </ScrollView>

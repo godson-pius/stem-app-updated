@@ -4,7 +4,6 @@ import {
   Image,
   Platform,
   Text,
-  SafeAreaView,
   KeyboardAvoidingView,
   View,
   FlatList,
@@ -12,6 +11,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Collapsible } from "@/components/Collapsible";
 import { ExternalLink } from "@/components/ExternalLink";
@@ -66,10 +66,10 @@ export default function TabTwoScreen() {
         {/* Message Bubble */}
         <View
           className={`rounded-lg px-4 py-2 max-w-[70%] ${
-            isUser ? "bg-blue-500" : "bg-gray-300"
+            isUser ? "bg-blue-500" : "bg-slate-800"
           }`}
         >
-          <Text className={`text-sm ${isUser ? "text-white" : "text-black"}`}>
+          <Text className={`text-sm ${isUser ? "text-white" : "text-white"}`}>
             {item.message}
           </Text>
         </View>
@@ -97,9 +97,9 @@ export default function TabTwoScreen() {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 py-7 bg-white">
+    <SafeAreaView className="flex-1 bg-white">
       <KeyboardAvoidingView
-        className="flex-1"
+        className="h-screen relative"
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={90}
       >
@@ -113,7 +113,7 @@ export default function TabTwoScreen() {
         />
 
         {/* Input */}
-        <View className="flex-row items-center p-4 border-t border-gray-200 bg-white">
+        <View className="flex-row items-center p-4 border-t border-gray-200 bg-white absolute bottom-20">
           <TextInput
             className="flex-1 border border-gray-300 rounded-full px-4 py-2 mr-2"
             placeholder="Type a message..."

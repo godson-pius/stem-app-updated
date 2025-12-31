@@ -13,7 +13,6 @@ export const loginUser = async (user) => {
 
         if (!querySnapshot.empty) {
             const user = querySnapshot.docs[0].data(); // Assuming only one admin with this email
-            console.log("Student found:", user);
             return user;
         } else {
             return null;
@@ -134,7 +133,6 @@ export const updateUserInDb = async (uid, updatedData) => {
     try {
         const userRef = doc(db, "users", uid);
         await updateDoc(userRef, updatedData);
-        console.log("User data updated successfully!");
         return true;
     } catch (error) {
         console.error("Error updating user data:", error.message);
@@ -143,7 +141,6 @@ export const updateUserInDb = async (uid, updatedData) => {
 }
 
 export const getAllCourse = async (course) => {
-    console.log("=>", course.classname)
     try {
         const courseRef = collection(db, "courses"); // Reference to the 'courses' collection
         const q = query(courseRef,
@@ -177,8 +174,6 @@ export const getAllTopicsForACourse = async (course) => {
         querySnapshot.forEach((doc) => {
             topics.push({ id: doc.id, ...doc.data() }); // Push the document data into the array
         });
-
-        console.log("Topics:", topics);
         return topics;
     } catch (error) {
         console.error("Error fetching topics:", error.message);
@@ -187,7 +182,6 @@ export const getAllTopicsForACourse = async (course) => {
 }
 
 export const getAllUploadsForACourse = async (data) => {
-    console.log("Data => ", data)
     try {
         const topicRef = collection(db, "uploads"); // Reference to the 'uploads' collection
         const q = query(topicRef,
@@ -216,7 +210,6 @@ export const sendMessage = async (data) => {
             ...data,
             createdAt: serverTimestamp()
         });
-        console.log("Chat Added with document ID:", docRef.id);
         return true;
     } catch (error) {
         console.error("Error adding chat ID:", error.message);

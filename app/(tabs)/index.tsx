@@ -2,13 +2,14 @@ import { defaultStyle } from "@/utils/defaultStyle";
 import { Ionicons } from "@expo/vector-icons";
 import {
   StyleSheet,
-  SafeAreaView,
   View,
   Text,
   TextInput,
   ScrollView,
   Alert,
   RefreshControl,
+  ImageBackground,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Subjects from "@/components/Subjects";
@@ -16,11 +17,14 @@ import { IStudent, ISubject } from "@/interface";
 import { getAllCourse } from "@/utils/firestore";
 import { clearStorage, readData } from "@/utils/storage";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { StatusBar } from "expo-status-bar";
 
 export default function HomeScreen() {
   const [subjects, setSubjects] = useState<ISubject[]>([]);
   const [userData, setUserData] = useState<IStudent>();
   const [refreshing, setRefreshing] = React.useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>("")
   const params = useLocalSearchParams();
   const navigation = useRouter();
 
@@ -68,75 +72,81 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <SafeAreaView className={"bg-white py-7 h-screen"}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
-        {/* Header */}
-        <View style={[styles.container]}>
-          <Text
-            style={[defaultStyle.text, styles.greeting]}
-            className={"font-medium"}
-          >
-            Welcome back, {userData?.fullname}
-          </Text>
-          {/*<Text style={defaultStyle.text}>{userData?.studentClass.toUpperCase()}</Text>*/}
-          <Ionicons
-            name="log-out-outline"
-            size={25}
-            color={"red"}
-            onPress={handleLogout}
+    <>
+      <SafeAreaView className={"bg-white py-3 h-screen"}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+           {/* Header  */}
+          <View style={[styles.container]}>
+            <Text
+              style={[defaultStyle.text, styles.greeting]}
+              className={"font-medium"}
+            >
+              Welcome back, {userData?.fullname}
+            </Text>
+            <View className="flex-row items-center gap-x-2">
+              <Text style={defaultStyle.text}>{userData?.studentClass.toUpperCase()}</Text>
+            <Ionicons
+              name="log-out-outline"
+              size={25}
+              color={"black"}
+              onPress={handleLogout}
+            />
+            </View>
+          </View>
+
+           {/* Search  */}
+          <TextInput
+          onChangeText={(e) => setSearchQuery(e)}
+            placeholder="What would you like to learn"
+            style={styles.searchInput}
           />
-        </View>
 
-        {/* Search */}
-        <TextInput
-          placeholder="What would you like to learn"
-          style={styles.searchInput}
-        />
+           {/* Subjects  */}
+          <View style={styles.subjects}>
+            {subjects.filter(subj => subj.name.toLowerCase().includes(searchQuery.toLowerCase())).map((subject, index) => (
+              <Subjects key={index} subject={subject} />
+            ))}
+          </View>
 
-        {/* Subjects */}
-        <View style={styles.subjects}>
-          {subjects.map((subject, index) => (
-            <Subjects key={index} subject={subject} />
-          ))}
-        </View>
+           {/* Banner for practice exams  */}
+          {/* <View style={{borderRadius: 30}}>
+              <ImageBackground
+                  source={{uri: 'https://img.freepik.com/premium-photo/stepping-into-success-school-books-accessories-graduation-vibes-light-blue-3d-rendering_930407-5388.jpg?w=2000'}}
+                  resizeMode='cover' style={styles.practiceContainer}>
+                  <View style={styles.practice}>
+                      <Text style={[defaultStyle.text, styles.text]}>Practice exams for perfect grades. Practice
+                          makes perfect!</Text>
+                      <TouchableOpacity style={styles.practiceBtn}>
+                          <Text style={{fontFamily: 'epilogue-m'}}>Practice Exams</Text>
+                      </TouchableOpacity>
+                  </View>
+                  <Ionicons name='calendar-outline' size={80} style={{ marginLeft: -70 }} /> *!/
+              </ImageBackground>
+          </View> */}
 
-        {/* Banner for practice exams */}
-        {/*<View style={{borderRadius: 30}}>*/}
-        {/*    <ImageBackground*/}
-        {/*        source={{uri: 'https://img.freepik.com/premium-photo/stepping-into-success-school-books-accessories-graduation-vibes-light-blue-3d-rendering_930407-5388.jpg?w=2000'}}*/}
-        {/*        resizeMode='cover' style={styles.practiceContainer}>*/}
-        {/*        <View style={styles.practice}>*/}
-        {/*            <Text style={[defaultStyle.text, styles.text]}>Practice exams for perfect grades. Practice*/}
-        {/*                makes perfect!</Text>*/}
-        {/*            <TouchableOpacity style={styles.practiceBtn}>*/}
-        {/*                <Text style={{fontFamily: 'epilogue-m'}}>Practice Exams</Text>*/}
-        {/*            </TouchableOpacity>*/}
-        {/*        </View>*/}
-        {/*        /!* <Ionicons name='calendar-outline' size={80} style={{ marginLeft: -70 }} /> *!/*/}
-        {/*    </ImageBackground>*/}
-        {/*</View>*/}
-
-        {/* Banner for practice exams */}
-        {/*<View style={{borderRadius: 30}}>*/}
-        {/*    <ImageBackground*/}
-        {/*        source={{uri: 'https://img.freepik.com/premium-photo/stepping-into-success-school-books-accessories-graduation-vibes-light-blue-3d-rendering_930407-5388.jpg?w=2000'}}*/}
-        {/*        resizeMode='cover' style={styles.practiceContainer}>*/}
-        {/*        <View style={styles.practice}>*/}
-        {/*            <Text style={[defaultStyle.text, styles.text]}>Take quiz for perfection. Practice makes*/}
-        {/*                perfect!</Text>*/}
-        {/*            <TouchableOpacity style={styles.practiceBtn}>*/}
-        {/*                <Text style={{fontFamily: 'epilogue-m'}}>Take Quiz</Text>*/}
-        {/*            </TouchableOpacity>*/}
-        {/*        </View>*/}
-        {/*        /!* <Ionicons name='calendar-outline' size={80} style={{ marginLeft: -70 }} /> *!/*/}
-        {/*    </ImageBackground>*/}
-        {/*</View>*/}
-      </ScrollView>
-    </SafeAreaView>
+           {/* Banner for practice exams  */}
+          {/* <View style={{borderRadius: 30}}>
+              <ImageBackground
+                  source={{uri: 'https://img.freepik.com/premium-photo/stepping-into-success-school-books-accessories-graduation-vibes-light-blue-3d-rendering_930407-5388.jpg?w=2000'}}
+                  resizeMode='cover' style={styles.practiceContainer}>
+                  <View style={styles.practice}>
+                      <Text style={[defaultStyle.text, styles.text]}>Take quiz for perfection. Practice makes
+                          perfect!</Text>
+                      <TouchableOpacity style={styles.practiceBtn}>
+                          <Text style={{fontFamily: 'epilogue-m'}}>Take Quiz</Text>
+                      </TouchableOpacity>
+                  </View>
+                   <Ionicons name='calendar-outline' size={80} style={{ marginLeft: -70 }} /> 
+              </ImageBackground>
+          </View> */}
+        </ScrollView>
+      </SafeAreaView>
+      <StatusBar style="auto" />
+    </>
   );
 }
 

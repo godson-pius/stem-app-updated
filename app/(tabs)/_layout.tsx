@@ -4,6 +4,7 @@ import React from 'react';
 import {TabBarIcon} from '@/components/navigation/TabBarIcon';
 import {Colors} from '@/constants/Colors';
 import {useColorScheme} from '@/hooks/useColorScheme';
+import { Platform } from 'react-native';
 
 export default function TabLayout() {
     const colorScheme = useColorScheme();
@@ -14,8 +15,11 @@ export default function TabLayout() {
                 tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
                 headerShown: false,
                 tabBarStyle: {
-                    backgroundColor: colorScheme === 'dark' ? '#5c5c6a' : '#ffffff', // or any color you want
+                    backgroundColor: colorScheme === 'dark' ? '#5c5c6a' : '#ffffff',
                     elevation: 0, // optional: removes Android shadow
+                    position: 'absolute',
+                    bottom: Platform.OS === 'ios' ? 0 : 10,
+                    borderRadius: 25,
                 },
             }}>
             <Tabs.Screen

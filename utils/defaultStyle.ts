@@ -1,9 +1,9 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 export const defaultStyle = StyleSheet.create({
   container: {
     paddingHorizontal: 25,
-    marginTop: 10,
+    // marginTop: 10,
   },
 
   button: {
@@ -33,7 +33,7 @@ export const defaultStyle = StyleSheet.create({
     borderBottomWidth: 1,
     width: 300,
     fontSize: 20,
-    marginTop: 10,
+    marginTop: Platform.OS === "ios" ? 10 : 0,
     fontFamily: "epilogue-m",
   },
 
